@@ -3,8 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "Robot.h"
-#include "autonomous/autonomous.hpp"
-#include "subsystems/subsystems.hpp"
 
 #include <fmt/core.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -19,6 +17,9 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   xbox = new frc::XboxController(0);
+
+  drive = new subsystems::Drive();
+  manip = new subsystems::Manipulator();
 }
 
 /**
@@ -57,45 +58,49 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
   /* Drive */
-  double power = xbox->GetRawAxis(1);     // 1 -- Left Y Axis
-  double steering = xbox->GetRawAxis(4);  // 4 -- Rght X Axis
+  double power = xbox->GetRawAxis(4);     // 1 -- Left Y Axis
+  double steering = xbox->GetRawAxis(1);  // 4 -- Rght X Axis
   
   this->drive->move(power, steering);
+  
+  // /* Intake */
+  // if (xbox->GetRightBumper() && !this->manip->get_note_sensor()) {
+  //   // If pressing intake button, and the NOTE is not in the intake
+  //   this->manip->intake(1.0);
+  // } else if (xbox->GetLeftBumper()) {
+  //   // Outtake
+  //   this->manip->intake(-1.0);
+  //   this->manip->shoot(-0.25);
+  // } else {
+  //   // Do nothing
+  //   this->manip->intake(0.0);
+  //   this->manip->shoot(0.0);
+  // }
 
-  /* Intake */
-  if (xbox->GetRightBumper() && !this->manip->get_note_sensor()) {
-    // If pressing intake button, and the NOTE is not in the intake
-    this->manip->intake(1.0);
-  } else if (xbox->GetLeftBumper()) {
-    // Outtake
-    this->manip->intake(-1.0);
-    this->manip->shoot(-0.25);
-  } else {
-    // Do nothing
-    this->manip->intake(0.0);
-    this->manip->shoot(0.0);
-  }
+  // /* Shooter */
+  // if (xbox->GetRightTriggerAxis() > 0.5) {
+  //   this->manip->shoot(xbox->GetRightTriggerAxis());
 
-  /* Shooter */
-  if (xbox->GetRightTriggerAxis() > 0.5) {
-    this->manip->shoot(xbox->GetRightTriggerAxis());
-
-    if (xbox->GetRightBumper()) {
-      // Run intake despite NOTE being in intake
-      this->manip->intake(1.0);
-    }
-  } else {
-    // Do nothing
-    this->manip->intake(0.0);
-    this->manip->shoot(0.0);
-  }
+  //   if (xbox->GetRightBumper()) {
+  //     // Run intake despite NOTE being in intake
+  //     this->manip->intake(1.0);
+  //   }
+  // } else {
+  //   // Do nothing
+  //   this->manip->intake(0.0);
+  //   this->manip->shoot(0.0);
+  // }
 
   /* Arm */
-  if (xbox->GetPOV(0)) {
-    this->manip->arm(0.1);  // Up
-  } else if (xbox->GetPOV(180)) {
-    this->manip->arm(-0.1);  // Down
+  if (xbox->GetPOV(0) == 0) {
+    this->manip->arm(0.25);  // Up
+  } else if (xbox->GetPOV(0) == 180) {
+    this->manip->arm(-0.25);  // Down
+  } else {
+    this->manip->arm(0.0);
   }
+
+
 }
 
 void Robot::DisabledInit() {}

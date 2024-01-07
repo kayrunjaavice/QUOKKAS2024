@@ -15,6 +15,9 @@
 #include <ctre/phoenix.h>
 #include <frc/Timer.h>
 
+#include "../cpp/autonomous/autonomous.hpp"
+#include "../cpp/subsystems/subsystems.hpp"
+
 class Robot : public frc::TimedRobot {
 public:
 void RobotInit() override;
@@ -27,6 +30,7 @@ void DisabledInit() override;
 void DisabledPeriodic() override;
 void TestInit() override;
 void TestPeriodic() override;
+
 private:
 frc::SendableChooser<std::string> m_chooser;
 const std::string kAutoNameDefault = "Default";

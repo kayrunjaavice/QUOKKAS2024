@@ -9,11 +9,7 @@ namespace autonomous
     private:
         /* data */
     public:
-        basic(/* args */);
-        static bool run();
+        Basic(/* args */);
+        void run();
     };
-    
-    Basic::basic(/* args */)
-    {
-    }
 } // namespace autonomous

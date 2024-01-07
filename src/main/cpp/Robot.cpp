@@ -46,7 +46,8 @@ void Robot::AutonomousInit() {
   timeAtTheStart = currentTimeStamp;
 
   if (m_autoSelected == kAutoNameCustom) {
-    autonomous::Basic::run();
+    autonomous::Basic basic;
+    basic.run();
   } else {
     // Default Auto goes here
   }

@@ -18,7 +18,7 @@ namespace subsystems
         this->R2.Set(rpower);
     }
 
-    bool Drive::routine_timed_gyro_drive(double max_speed, double heading, double seconds)
+    void Drive::routine_timed_gyro_drive(double max_speed, double heading, double seconds)
     {
         double start_time = frc::GetTime().value();
         double end_time = start_time + seconds;

@@ -1,7 +1,9 @@
 #pragma once
 
+#include <frc/SPI.h>
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
 #include <AHRS.h>
+#include "../subsystems/Drive.hpp"
 
 namespace subsystems
 {
@@ -13,11 +15,11 @@ namespace subsystems
         ctre::phoenix::motorcontrol::can::WPI_TalonSRX R1{1};
         ctre::phoenix::motorcontrol::can::WPI_TalonSRX R2{2};
 
-        AHRS* navx = new AHRS(SPI.Port.kMPX);
+        AHRS* navx = new AHRS(frc::SPI::Port::kMXP);
     public:
         Drive();
         void move(double power, double steering);
-        bool routine_timed_gyro_drive(double max_speed, double heading, double seconds);
+        void routine_timed_gyro_drive(double max_speed, double heading, double seconds);
     };
     
 } // namespace subsystems

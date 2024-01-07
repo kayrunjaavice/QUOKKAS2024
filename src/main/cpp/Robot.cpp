@@ -4,7 +4,7 @@
 
 #include "Robot.h"
 #include "autonomous/autonomous.hpp"
-#include "subsystems/Drive.hpp"
+#include "subsystems/subsystems.hpp"
 
 #include <fmt/core.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -18,9 +18,7 @@ void Robot::RobotInit() {
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-  driver = new frc::XboxController(0);
-
-
+  xbox = new frc::XboxController(0);
 }
 
 /**
@@ -58,17 +56,46 @@ void Robot::AutonomousPeriodic() {}
 void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
+  /* Drive */
+  double power = xbox->GetRawAxis(1);     // 1 -- Left Y Axis
+  double steering = xbox->GetRawAxis(4);  // 4 -- Rght X Axis
+  
+  this->drive->move(power, steering);
 
-  L2->Set(-driver->GetLeftY());
-  R2->Set(driver->GetRightY());
-  L1->Set(-driver->GetLeftY());
-  R1->Set(driver->GetRightY());
+  /* Intake */
+  if (xbox->GetRightBumper() && !this->manip->get_note_sensor()) {
+    // If pressing intake button, and the NOTE is not in the intake
+    this->manip->intake(1.0);
+  } else if (xbox->GetLeftBumper()) {
+    // Outtake
+    this->manip->intake(-1.0);
+    this->manip->shoot(-0.25);
+  } else {
+    // Do nothing
+    this->manip->intake(0.0);
+    this->manip->shoot(0.0);
+  }
 
-  M1->Set(driver->GetLeftTriggerAxis());
-  M1->Set((driver->GetLeftBumper() == 1) ? -0.2 : 0);
+  /* Shooter */
+  if (xbox->GetRightTriggerAxis() > 0.5) {
+    this->manip->shoot(xbox->GetRightTriggerAxis());
 
-  M2->Set(driver->GetRightTriggerAxis());
-  M2->Set((driver->GetRightBumper() == 1) ? -0.2 : 0);
+    if (xbox->GetRightBumper()) {
+      // Run intake despite NOTE being in intake
+      this->manip->intake(1.0);
+    }
+  } else {
+    // Do nothing
+    this->manip->intake(0.0);
+    this->manip->shoot(0.0);
+  }
+
+  /* Arm */
+  if (xbox->GetPOV(0)) {
+    this->manip->arm(0.1);  // Up
+  } else if (xbox->GetPOV(180)) {
+    this->manip->arm(-0.1);  // Down
+  }
 }
 
 void Robot::DisabledInit() {}

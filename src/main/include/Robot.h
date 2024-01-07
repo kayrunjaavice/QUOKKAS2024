@@ -32,17 +32,16 @@ frc::SendableChooser<std::string> m_chooser;
 const std::string kAutoNameDefault = "Default";
 const std::string kAutoNameCustom = "My Auto";
 std::string m_autoSelected;
-//TalonSRX motor controllers for the arm and gripper
-WPI_TalonSRX *R1, *R2;
-WPI_TalonSRX *L1, *L2;
-WPI_VictorSPX *M1, *M2;
 //drivebase motors
 //xbox controllers
-frc::XboxController *driver;
+frc::XboxController *xbox;
 //frc::XboxController *codriver;
 //timer we're going to use for autonomous
 frc::Timer autoTimer;
 //variables used within the program
+
+subsystems::Drive* drive;
+subsystems::Manipulator* manip;
 
 const int DRIVE_L1_ID = 3;
 const int DRIVE_L2_ID = 4;

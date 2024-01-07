@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "Robot.h"
+#include "autonomous/autonomous.hpp"
+#include "subsystems/Drive.hpp"
 
 #include <fmt/core.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -18,13 +20,7 @@ void Robot::RobotInit() {
 
   driver = new frc::XboxController(0);
 
-  R2 = new WPI_TalonSRX(1);
-  L2 = new WPI_TalonSRX(4);
-  R1 = new WPI_TalonSRX(2);
-  L1 = new WPI_TalonSRX(3);
 
-  M1 = new WPI_VictorSPX(6);
-  M2 = new WPI_VictorSPX(5);
 }
 
 /**
@@ -43,42 +39,28 @@ void Robot::RobotPeriodic() {matchTime = (double)frc::Timer::GetMatchTime();
 
   double timeAtTheStart = 0;
 
-/**
- * This autonomous (along with the chooser code above) shows how to select
- * between different autonomous modes using the dashboard. The sendable chooser
- * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
- * remove all of the chooser code and uncomment the GetString line to get the
- * auto name from the text box below the Gyro.
- *
- * You can add additional auto modes by adding additional comparisons to the
- * if-else structure below with additional strings. If using the SendableChooser
- * make sure to add them to the chooser code above as well.
- */
 void Robot::AutonomousInit() {
   m_autoSelected = m_chooser.GetSelected();
-  // m_autoSelected = SmartDashboard::GetString("Auto Selector",
-  //     kAutoNameDefault);
   fmt::print("Auto selected: {}\n", m_autoSelected);
 
   timeAtTheStart = currentTimeStamp;
 
   if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
+    autonomous::Basic::run();
   } else {
     // Default Auto goes here
   }
 }
 
-void Robot::AutonomousPeriodic() {
-}
+void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
 
-  L2->Set(driver->GetLeftY());
+  L2->Set(-driver->GetLeftY());
   R2->Set(driver->GetRightY());
-  L1->Set(driver->GetLeftY());
+  L1->Set(-driver->GetLeftY());
   R1->Set(driver->GetRightY());
 
   M1->Set(driver->GetLeftTriggerAxis());

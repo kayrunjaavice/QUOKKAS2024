@@ -8,7 +8,6 @@
 #include <iostream>
 #include <fmt/core.h>
 
-
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -44,4 +43,15 @@ frc::XboxController *driver;
 //timer we're going to use for autonomous
 frc::Timer autoTimer;
 //variables used within the program
+
+const int DRIVE_L1_ID = 3;
+const int DRIVE_L2_ID = 4;
+const int DRIVE_R1_ID = 1;
+const int DRIVE_R2_ID = 2;
+
+const int INTAKE_ID = 5;
+const int SHOOTER_ID = 6;
+
+const int ARM_L_ID = 7;
+const int ARM_R_ID = 8;
 };

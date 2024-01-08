@@ -78,15 +78,15 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
   /* Drive */
-  double power = xbox->GetRawAxis(1);     // 1 -- Left Y Axis
+  double power = -xbox->GetRawAxis(1);     // 1 -- Left Y Axis
   double steering = xbox->GetRawAxis(4);  // 4 -- Rght X Axis
   
   drive->getInstance().move(power, steering);
   
   /* Intake */
-  if (xbox->GetRightBumper()/* && manip->getInstance().get_note_sensor()*/) {
+  if (xbox->GetRightBumper() && manip->getInstance().get_note_sensor()) {
     // If pressing intake button, and the NOTE is not in the intake
-    manip->getInstance().intake(1.0);
+    manip->getInstance().intake(0.5);
   } else if (xbox->GetLeftBumper()) {
     // Outtake
     manip->getInstance().intake(-1.0);
@@ -107,7 +107,7 @@ void Robot::TeleopPeriodic() {
     }
   } else {
     // Do nothing
-    manip->getInstance().intake(0.0);
+    // manip->getInstance().intake(0.0);
     manip->getInstance().shoot(0.0);
   }
 

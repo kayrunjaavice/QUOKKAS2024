@@ -27,9 +27,9 @@ namespace subsystems
         Manipulator(Manipulator const&);
         void operator=(Manipulator const&);
     public:
-        double kARM_FLOOR_POS = 0.0;
-        double kARM_START_POS = 0.0;
-        double kARM_AMP_POS   = 0.0;        
+        double kARM_FLOOR_POS = 0.584;
+        double kARM_START_POS = 0.376;
+        double kARM_AMP_POS   = 0.325;
         
         void arm(double power);
         void arm_to_pos(double pos);

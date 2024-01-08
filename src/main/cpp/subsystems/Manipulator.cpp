@@ -11,6 +11,7 @@ namespace subsystems
     
     Manipulator::Manipulator()
     {
+        this->intake_motor.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
         this->arm_l.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
         this->arm_r.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
     }

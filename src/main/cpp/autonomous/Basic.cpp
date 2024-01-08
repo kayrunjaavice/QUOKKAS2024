@@ -6,7 +6,7 @@ namespace autonomous
     }
     
     void Basic::run() {
-        subsystems::Drive::getInstance().timed_gyro_drive(0.25, 0.0, 30.0);
+        subsystems::Drive::getInstance().gyro_drive(0.25, 0.0);
     }
     
 } // namespace autonomous

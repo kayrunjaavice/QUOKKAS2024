@@ -15,14 +15,13 @@ std::string m_autoSelected;
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
-  m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
+  m_chooser.AddOption("Basic", "Basic");  
   m_chooser.AddOption("One Note", "OneNote");
   m_chooser.AddOption("Multi Note", "MultiNote");
+  
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   xbox = new frc::XboxController(0);
-
-  manip = new subsystems::Manipulator();
 }
 
 /**
@@ -47,22 +46,22 @@ void Robot::AutonomousInit() {
   m_autoSelected = m_chooser.GetSelected();
   fmt::print("Auto selected: {}\n", m_autoSelected);
 
+  this->basic = new autonomous::Basic();
+  this->onenote = new autonomous::OneNote();
+  this->multinote = new autonomous::MultiNote();
+
   timeAtTheStart = currentTimeStamp;
 }
 
 void Robot::AutonomousPeriodic() {
-  if (m_autoSelected == kAutoNameCustom) {
-    autonomous::Basic basic;
-    basic.run();
+  if (m_autoSelected == "Basic") {
+    this->basic->run();
   } else if (m_autoSelected == "OneNote") {
-    autonomous::OneNote onenote;
-    onenote.run();
+    this->onenote->run();
   } else if (m_autoSelected == "MultiNote") {
-    autonomous::MultiNote multinote;
-    multinote.run();
+    this->multinote->run();
   } else {
-    autonomous::Basic basic;
-    basic.run();
+    this->basic->run();
   }
 }
 
@@ -76,43 +75,44 @@ void Robot::TeleopPeriodic() {
   drive->getInstance().move(power, steering);
   
   // /* Intake */
-  // if (xbox->GetRightBumper() && !this->manip->get_note_sensor()) {
+  // if (xbox->GetRightBumper() && !manip->getInstance().get_note_sensor()) {
   //   // If pressing intake button, and the NOTE is not in the intake
-  //   this->manip->intake(1.0);
+  //   manip->getInstance().intake(1.0);
   // } else if (xbox->GetLeftBumper()) {
   //   // Outtake
-  //   this->manip->intake(-1.0);
-  //   this->manip->shoot(-0.25);
+  //   manip->getInstance().intake(-1.0);
+  //   manip->getInstance().shoot(-0.25);
   // } else {
   //   // Do nothing
-  //   this->manip->intake(0.0);
-  //   this->manip->shoot(0.0);
+  //   manip->getInstance().intake(0.0);
+  //   manip->getInstance().shoot(0.0);
   // }
 
   // /* Shooter */
   // if (xbox->GetRightTriggerAxis() > 0.5) {
-  //   this->manip->shoot(xbox->GetRightTriggerAxis());
+  //   manip->getInstance().shoot(xbox->GetRightTriggerAxis());
 
   //   if (xbox->GetRightBumper()) {
   //     // Run intake despite NOTE being in intake
-  //     this->manip->intake(1.0);
+  //     manip->getInstance().intake(1.0);
   //   }
   // } else {
   //   // Do nothing
-  //   this->manip->intake(0.0);
-  //   this->manip->shoot(0.0);
+  //   manip->getInstance().intake(0.0);
+  //   manip->getInstance().shoot(0.0);
   // }
 
   /* Arm */
+  // Avoid going past 25% power. ABSOLUTE MAXIMUM 50%.
   if (xbox->GetPOV(0) == 0) {
-    this->manip->arm(0.25);  // Up
+    manip->getInstance().arm(0.25);  // Up
   } else if (xbox->GetPOV(0) == 180) {
-    this->manip->arm(-0.25);  // Down
+    manip->getInstance().arm(-0.25);  // Down
   } else {
-    this->manip->arm(0.0);
+    manip->getInstance().arm(0.0);
   }
 
-
+  frc::SmartDashboard::PutNumber("Arm", manip->getInstance().get_arm_enc());
 }
 
 void Robot::DisabledInit() {}

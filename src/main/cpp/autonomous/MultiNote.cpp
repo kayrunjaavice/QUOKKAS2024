@@ -1,4 +1,5 @@
 #include "MultiNote.hpp"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 namespace autonomous
 {
@@ -6,14 +7,17 @@ namespace autonomous
     
     MultiNote::MultiNote() {
         start_time = frc::GetTime().value();
+        frc::SmartDashboard::PutNumber("start time", start_time);
     }
     
     void MultiNote::run() {
-        if (frc::GetTime().value() < start_time + 10.0) {
-            subsystems::Drive::getInstance().timed_gyro_drive(0.0, 90.0, 10.0);
+        frc::SmartDashboard::PutNumber("time", frc::GetTime().value());
+        if (frc::GetTime().value() < (start_time + 1.0)) {
+            subsystems::Drive::getInstance().gyro_drive(0.0, 90.0);
+        } else {
+            // Finally,
+            subsystems::Drive::getInstance().move(0.0, 0.0);  // Stop
         }
-
-        subsystems::Drive::getInstance().move(0.0, 0.0);  // Stop
     }
     
 } // namespace autonomous

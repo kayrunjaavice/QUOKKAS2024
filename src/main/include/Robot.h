@@ -44,8 +44,14 @@ frc::XboxController *xbox;
 frc::Timer autoTimer;
 //variables used within the program
 
+/* Mechanisms */
 subsystems::Drive *drive;
 subsystems::Manipulator *manip;
+
+/* Autonomous Modes */
+autonomous::Basic *basic;
+autonomous::OneNote *onenote;
+autonomous::MultiNote *multinote;
 
 const int DRIVE_L1_ID = 3;
 const int DRIVE_L2_ID = 4;

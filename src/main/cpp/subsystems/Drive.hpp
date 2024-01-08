@@ -23,7 +23,7 @@ namespace subsystems
         void operator=(Drive const&);
     public:
         void move(double power, double steering);
-        void timed_gyro_drive(double max_speed, double heading, double seconds);
+        void gyro_drive(double max_speed, double heading);
         void reset_gyro();
 
         // Singleton pattern

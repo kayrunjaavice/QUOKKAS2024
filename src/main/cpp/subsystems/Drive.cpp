@@ -29,11 +29,10 @@ namespace subsystems
         this->R2.Set(rpower);
     }
 
-    void Drive::timed_gyro_drive(double max_speed, double heading, double seconds)
+    void Drive::gyro_drive(double max_speed, double heading)
     {
         double Kp = 0.01;
         double error = heading - this->navx->GetAngle();
-        wpi::outs() << std::to_string(this->navx->GetAngle());
         double steering = Kp * error;
         this->move(max_speed, steering);
     }

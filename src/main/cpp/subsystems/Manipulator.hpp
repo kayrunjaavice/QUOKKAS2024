@@ -19,12 +19,28 @@ namespace subsystems
 
         frc::DigitalInput note_sensor{0};
         ctre::phoenix::motorcontrol::can::WPI_VictorSPX intake_motor{9};
-    public:
+
+        // Singleton pattern
         Manipulator();
+        Manipulator(Manipulator const&);
+        void operator=(Manipulator const&);
+    public:
+        double kARM_FLOOR_POS = 0.0;
+        double kARM_START_POS = 0.0;
+        double kARM_AMP_POS   = 0.0;        
+        
         void arm(double power);
+        void arm_to_pos(double pos);
         void intake(double power);
         void shoot(double power);
         bool get_note_sensor();
+        double get_arm_enc();
+
+        // Singleton pattern
+        // Manipulator(Manipulator const&) = delete;
+        // void operator=(Manipulator const&) = delete;
+        /** Singleton pattern. Call this instead of instantiating this class. **/
+        static Manipulator& getInstance();
     };
     
 } // namespace subsystems

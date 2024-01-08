@@ -2,10 +2,31 @@
 
 namespace subsystems
 {
+    // Singleton
+    Manipulator& Manipulator::getInstance()
+    {
+        static Manipulator instance;
+        return instance;
+    }
+    
     Manipulator::Manipulator()
     {
         this->arm_l.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
         this->arm_r.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
+    }
+
+    double Manipulator::get_arm_enc()
+    {
+        return this->arm_enc.GetAbsolutePosition();
+    }
+
+    /* See Manipulator::kARM_FLOOR_POS etc. */
+    void Manipulator::arm_to_pos(double pos)
+    {
+        double Kp = 0.0;
+        double error = pos - this->arm_enc.GetAbsolutePosition();
+        double power = Kp * error;
+        this->arm(power);
     }
 
     void Manipulator::arm(double power)

@@ -2,6 +2,7 @@
 
 #include <ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
+#include <frc/motorcontrol/VictorSP.h>
 #include <frc/DutyCycleEncoder.h>
 #include <frc/DigitalInput.h>
 

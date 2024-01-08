@@ -3,5 +3,6 @@
 class util
 {
     public:
-        static bool wait(double start_time, double duration);
+        /* Note that step_start is passed by reference and incremented by `duration` seconds. */
+        static bool wait(double &step_start, double duration);
 };

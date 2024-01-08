@@ -87,6 +87,7 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp",
-    "sparsecore": "cpp"
+    "sparsecore": "cpp",
+    "*.inc": "cpp"
   }
 }

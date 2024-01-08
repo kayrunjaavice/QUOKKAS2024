@@ -12,9 +12,9 @@ namespace subsystems
         return instance;
     }
     
-    void Drive::reset_gyro()
+    void Drive::zero_gyro()
     {
-        this->navx->Reset();
+        this->navx->ZeroYaw();
     }
     
     void Drive::move(double power, double steering)
@@ -31,7 +31,7 @@ namespace subsystems
 
     void Drive::gyro_drive(double max_speed, double heading)
     {
-        double Kp = 0.01;
+        double Kp = 0.015;
         double error = heading - this->navx->GetAngle();
         double steering = Kp * error;
         this->move(max_speed, steering);

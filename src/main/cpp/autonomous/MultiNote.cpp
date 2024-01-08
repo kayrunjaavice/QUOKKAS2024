@@ -14,8 +14,12 @@ namespace autonomous
     void MultiNote::run() {
         frc::SmartDashboard::PutNumber("time", frc::GetTime().value());
         if (util::wait(st, 1)) {
-            subsystems::Drive::getInstance().gyro_drive(0.0, 90.0);
-        } else {
+            subsystems::Drive::getInstance().gyro_drive(0.375, 0.0);
+        } else if (util::wait(st, 1)) {
+            subsystems::Drive::getInstance().gyro_drive(-0.375, 0.0);
+        }
+        
+        else {
             // Finally,
             subsystems::Drive::getInstance().move(0.0, 0.0);  // Stop
         }

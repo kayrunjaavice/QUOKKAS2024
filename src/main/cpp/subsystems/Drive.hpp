@@ -24,7 +24,7 @@ namespace subsystems
     public:
         void move(double power, double steering);
         void gyro_drive(double max_speed, double heading);
-        void reset_gyro();
+        void zero_gyro();
 
         // Singleton pattern
         // Drive(Drive const&) = delete;

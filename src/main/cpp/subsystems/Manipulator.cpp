@@ -51,8 +51,8 @@ namespace subsystems
 
     void Manipulator::shoot(double power)
     {
-        this->shooter_a.Set(power);
-        // this->shooter_b.Set(power);  // TODO: check polarities
+        this->shooter_a.Set(-power);
+        this->shooter_b.Set(-power);  // TODO: check polarities
     }
 
     bool Manipulator::get_note_sensor()

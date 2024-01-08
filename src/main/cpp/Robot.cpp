@@ -42,7 +42,11 @@ void Robot::RobotPeriodic() {
 
   double timeAtTheStart = 0;
 
+bool testinit;
+
 void Robot::AutonomousInit() {
+  testinit = true;
+  
   m_autoSelected = m_chooser.GetSelected();
   fmt::print("Auto selected: {}\n", m_autoSelected);
 
@@ -54,6 +58,11 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
+  if (testinit) {
+    drive->zero_gyro();
+    testinit = false;
+  }
+  
   if (m_autoSelected == "Basic") {
     this->basic->run();
   } else if (m_autoSelected == "OneNote") {
@@ -74,33 +83,33 @@ void Robot::TeleopPeriodic() {
   
   drive->getInstance().move(power, steering);
   
-  // /* Intake */
-  // if (xbox->GetRightBumper() && !manip->getInstance().get_note_sensor()) {
-  //   // If pressing intake button, and the NOTE is not in the intake
-  //   manip->getInstance().intake(1.0);
-  // } else if (xbox->GetLeftBumper()) {
-  //   // Outtake
-  //   manip->getInstance().intake(-1.0);
-  //   manip->getInstance().shoot(-0.25);
-  // } else {
-  //   // Do nothing
-  //   manip->getInstance().intake(0.0);
-  //   manip->getInstance().shoot(0.0);
-  // }
+  /* Intake */
+  if (xbox->GetRightBumper()/* && manip->getInstance().get_note_sensor()*/) {
+    // If pressing intake button, and the NOTE is not in the intake
+    manip->getInstance().intake(1.0);
+  } else if (xbox->GetLeftBumper()) {
+    // Outtake
+    manip->getInstance().intake(-1.0);
+    manip->getInstance().shoot(-0.25);
+  } else {
+    // Do nothing
+    manip->getInstance().intake(0.0);
+    manip->getInstance().shoot(0.0);
+  }
 
-  // /* Shooter */
-  // if (xbox->GetRightTriggerAxis() > 0.5) {
-  //   manip->getInstance().shoot(xbox->GetRightTriggerAxis());
+  /* Shooter */
+  if (xbox->GetRightTriggerAxis() > 0.5) {
+    manip->getInstance().shoot(xbox->GetRightTriggerAxis());
 
-  //   if (xbox->GetRightBumper()) {
-  //     // Run intake despite NOTE being in intake
-  //     manip->getInstance().intake(1.0);
-  //   }
-  // } else {
-  //   // Do nothing
-  //   manip->getInstance().intake(0.0);
-  //   manip->getInstance().shoot(0.0);
-  // }
+    if (xbox->GetRightBumper()) {
+      // Run intake despite NOTE being in intake
+      manip->getInstance().intake(1.0);
+    }
+  } else {
+    // Do nothing
+    manip->getInstance().intake(0.0);
+    manip->getInstance().shoot(0.0);
+  }
 
   /* Arm */
   // Avoid going past 25% power. ABSOLUTE MAXIMUM 50%.

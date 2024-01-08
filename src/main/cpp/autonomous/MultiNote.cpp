@@ -1,18 +1,19 @@
 #include "MultiNote.hpp"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "../util/util.hpp"
 
 namespace autonomous
 {
-    double start_time;
+    double st;  // start time
     
     MultiNote::MultiNote() {
-        start_time = frc::GetTime().value();
-        frc::SmartDashboard::PutNumber("start time", start_time);
+        st = frc::GetTime().value();
+        frc::SmartDashboard::PutNumber("start time", st);
     }
     
     void MultiNote::run() {
         frc::SmartDashboard::PutNumber("time", frc::GetTime().value());
-        if (frc::GetTime().value() < (start_time + 1.0)) {
+        if (util::wait(st, 1)) {
             subsystems::Drive::getInstance().gyro_drive(0.0, 90.0);
         } else {
             // Finally,

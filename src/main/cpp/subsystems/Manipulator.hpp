@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>
-#include <frc/Encoder.h>
+#include <frc/DutyCycleEncoder.h>
 #include <frc/DigitalInput.h>
 
 namespace subsystems
@@ -9,9 +9,7 @@ namespace subsystems
     class Manipulator
     {
     private:        
-        frc::Encoder arm_enc{1, 2};
-        frc::DigitalInput lower_arm_limit{3};
-        frc::DigitalInput upper_arm_limit{4};
+        frc::DutyCycleEncoder arm_enc{9};
     
         ctre::phoenix::motorcontrol::can::WPI_VictorSPX arm_l{5};
         ctre::phoenix::motorcontrol::can::WPI_VictorSPX arm_r{6};

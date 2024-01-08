@@ -16,10 +16,21 @@ namespace subsystems
         ctre::phoenix::motorcontrol::can::WPI_TalonSRX R2{2};
 
         AHRS* navx = new AHRS(frc::SPI::Port::kMXP);
-    public:
+
+        // Singleton pattern
         Drive();
+        Drive(Drive const&);
+        void operator=(Drive const&);
+    public:
         void move(double power, double steering);
-        void routine_timed_gyro_drive(double max_speed, double heading, double seconds);
+        void timed_gyro_drive(double max_speed, double heading, double seconds);
+        void reset_gyro();
+
+        // Singleton pattern
+        // Drive(Drive const&) = delete;
+        // void operator=(Drive const&) = delete;
+        /** Singleton pattern. Call this instead of instantiating this class. **/
+        static Drive& getInstance();
     };
     
 } // namespace subsystems

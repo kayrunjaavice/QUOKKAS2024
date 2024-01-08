@@ -4,11 +4,11 @@
 
 namespace autonomous
 {
-    class Basic
+    class MultiNote
     {
     private:
     public:
-        Basic(/* args */);
+        MultiNote(/* args */);
         void run();
     };
 } // namespace autonomous

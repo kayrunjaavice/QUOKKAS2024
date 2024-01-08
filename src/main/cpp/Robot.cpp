@@ -10,15 +10,18 @@
 double currentTimeStamp = 0, lastTimestamp = 0, dt = 0;
 double matchTime = 0;
 
+std::string m_autoSelected;
+
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
+  m_chooser.AddOption("One Note", "OneNote");
+  m_chooser.AddOption("Multi Note", "MultiNote");
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   xbox = new frc::XboxController(0);
 
-  drive = new subsystems::Drive();
   manip = new subsystems::Manipulator();
 }
 
@@ -30,11 +33,13 @@ void Robot::RobotInit() {
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() {matchTime = (double)frc::Timer::GetMatchTime();
+void Robot::RobotPeriodic() {
+  matchTime = (double)frc::Timer::GetMatchTime();
   currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
   dt = currentTimeStamp - lastTimestamp;
 
-  lastTimestamp = currentTimeStamp;}
+  lastTimestamp = currentTimeStamp;
+}
 
   double timeAtTheStart = 0;
 
@@ -43,25 +48,32 @@ void Robot::AutonomousInit() {
   fmt::print("Auto selected: {}\n", m_autoSelected);
 
   timeAtTheStart = currentTimeStamp;
+}
 
+void Robot::AutonomousPeriodic() {
   if (m_autoSelected == kAutoNameCustom) {
     autonomous::Basic basic;
     basic.run();
+  } else if (m_autoSelected == "OneNote") {
+    autonomous::OneNote onenote;
+    onenote.run();
+  } else if (m_autoSelected == "MultiNote") {
+    autonomous::MultiNote multinote;
+    multinote.run();
   } else {
-    // Default Auto goes here
+    autonomous::Basic basic;
+    basic.run();
   }
 }
-
-void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
   /* Drive */
-  double power = xbox->GetRawAxis(4);     // 1 -- Left Y Axis
-  double steering = xbox->GetRawAxis(1);  // 4 -- Rght X Axis
+  double power = xbox->GetRawAxis(1);     // 1 -- Left Y Axis
+  double steering = xbox->GetRawAxis(4);  // 4 -- Rght X Axis
   
-  this->drive->move(power, steering);
+  drive->getInstance().move(power, steering);
   
   // /* Intake */
   // if (xbox->GetRightBumper() && !this->manip->get_note_sensor()) {

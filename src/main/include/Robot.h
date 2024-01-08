@@ -44,8 +44,8 @@ frc::XboxController *xbox;
 frc::Timer autoTimer;
 //variables used within the program
 
-subsystems::Drive* drive;
-subsystems::Manipulator* manip;
+subsystems::Drive *drive;
+subsystems::Manipulator *manip;
 
 const int DRIVE_L1_ID = 3;
 const int DRIVE_L2_ID = 4;

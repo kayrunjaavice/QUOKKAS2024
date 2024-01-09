@@ -26,12 +26,12 @@ public class Robot extends TimedRobot {
   private static final int rightDrive2 = 2;
 
   
-  private static final int liftMasterID = 5; 
-  private static final int liftFollower1ID = 6; 
+  private static final int liftMasterID = 9; 
+  private static final int liftFollower1ID = 10; 
   private static final int liftFollower2ID = 7;
   private static final int liftFollower3ID = 8;
-  private static final int buddyID1 = 9;
-  private static final int buddyID2 = 10;
+  private static final int buddyID1 = 5;
+  private static final int buddyID2 = 6;
 
 
 
@@ -118,19 +118,27 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_Drive.tankDrive(driverController.getLeftY(), driverController.getRightY());
+    m_Drive.tankDrive(-driverController.getLeftY(), driverController.getRightY());
 
-    // BUTTON A: BUDDY GRABBER
-    if (driverController.getAButtonPressed()) { 
-      m_buddyMasterMotor.set(0.1);
-    } else if (driverController.getAButtonReleased()) {
-      m_buddyMasterMotor.set(0);
+    // // BUTTON A: BUDDY GRABBER
+    // if (driverController.getAButtonPressed()) { 
+    //   m_buddyMasterMotor.set(0.1);
+    // } else if (driverController.getAButtonReleased()) {
+    //   m_buddyMasterMotor.set(0);
 
-    // BUTTON B: CLIMBER ELEVATOR
-    } else if (driverController.getBButtonPressed()) {
-      m_liftMasterMotor.set(0.1);
-    } else if (driverController.getBButtonReleased()) {
-      m_liftMasterMotor.set(0);
+    // // BUTTON B: CLIMBER ELEVATOR
+    // } else if (driverController.getBButtonPressed()) {
+    //   m_liftMasterMotor.set(0.1);
+    // } else if (driverController.getBButtonReleased()) {
+    //   m_liftMasterMotor.set(0);
+    // }
+
+    m_buddyMasterMotor.set(driverController.getRightTriggerAxis());
+
+    if (driverController.getLeftBumperReleased()){
+      m_liftMasterMotor.set(driverController.getLeftTriggerAxis());
+    } else {
+      m_liftMasterMotor.set(-driverController.getLeftTriggerAxis());
     }
   }
 }

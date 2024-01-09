@@ -73,6 +73,10 @@ void Robot::AutonomousPeriodic() {
 void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
+  /* Test */
+  std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  double tx = table->GetNumber("ty", 0.0);
+  
   /* Drive */
   double power = -xbox->GetRawAxis(1);     // 1 -- Left Y Axis
   double steering = xbox->GetRawAxis(4);  // 4 -- Rght X Axis
@@ -83,7 +87,9 @@ void Robot::TeleopPeriodic() {
   if (xbox->GetRightBumper() && manip->getInstance().get_note_sensor()) {
     // If pressing intake button, and the NOTE is not in the intake
     manip->getInstance().intake(0.75);
-    this->curr_arm_target = manip->getInstance().kARM_FLOOR_POS;
+    if (xbox->GetRightTriggerAxis() < 0.5) {
+      this->curr_arm_target = manip->getInstance().kARM_FLOOR_POS;
+    }
   } else if (xbox->GetLeftBumper()) {
     // Outtake
     manip->getInstance().intake(-1.0);
@@ -114,7 +120,7 @@ void Robot::TeleopPeriodic() {
     } else {
       // High goal shooting
       // Set shot angle
-      this->curr_arm_target = manip->getInstance().kARM_FENDER_POS;  // TODO: vision ranging LUT
+      // this->curr_arm_target = manip->getInstance().kARM_FENDER_POS;  // TODO: vision ranging LUT
     }
 
     // vision aiming

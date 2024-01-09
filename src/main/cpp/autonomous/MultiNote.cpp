@@ -33,13 +33,19 @@ namespace autonomous
             }
             Manipulator::getInstance().shoot(0.0);
             Manipulator::getInstance().arm_to_pos(Manipulator::getInstance().kARM_FLOOR_POS);
-            Drive::getInstance().gyro_drive(0.5, 0.0);
-        }  else if (util::wait(st, 7.0)) {
+            Drive::getInstance().gyro_drive(0.375, 0.0);
+        } else if (util::wait(st, 7.0)) {
             // Drive back
             Manipulator::getInstance().intake(0.0);
             Manipulator::getInstance().shoot(0.5);
             Manipulator::getInstance().arm_to_pos(Manipulator::getInstance().kARM_FENDER_POS);
             Drive::getInstance().gyro_drive(-0.5, 0.0);
+        } else if (util::wait(st, 9.0)) {
+            // Drive back
+            Manipulator::getInstance().intake(1.0);
+            Manipulator::getInstance().shoot(0.5);
+            Manipulator::getInstance().arm_to_pos(Manipulator::getInstance().kARM_FENDER_POS);
+            Drive::getInstance().gyro_drive(0.0, 0.0);
         }
         
         else {

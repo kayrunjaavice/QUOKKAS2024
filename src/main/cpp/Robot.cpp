@@ -20,7 +20,6 @@ void Robot::RobotInit() {
   
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption("Basic", "Basic");  
-  m_chooser.AddOption("One Note", "OneNote");
   m_chooser.AddOption("Multi Note", "MultiNote");
   
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
@@ -44,8 +43,6 @@ void Robot::RobotPeriodic() {
   lastTimestamp = currentTimeStamp;
 }
 
-  double timeAtTheStart = 0;
-
 bool testinit;
 
 void Robot::AutonomousInit() {
@@ -55,22 +52,17 @@ void Robot::AutonomousInit() {
   fmt::print("Auto selected: {}\n", m_autoSelected);
 
   this->basic = new autonomous::Basic();
-  this->onenote = new autonomous::OneNote();
   this->multinote = new autonomous::MultiNote();
-
-  timeAtTheStart = currentTimeStamp;
 }
 
 void Robot::AutonomousPeriodic() {
   if (testinit) {
-    drive->zero_gyro();
+    // drive->zero_gyro();
     testinit = false;
   }
   
   if (m_autoSelected == "Basic") {
     this->basic->run();
-  } else if (m_autoSelected == "OneNote") {
-    this->onenote->run();
   } else if (m_autoSelected == "MultiNote") {
     this->multinote->run();
   } else {

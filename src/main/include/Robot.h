@@ -52,7 +52,6 @@ double curr_arm_target;
 
 /* Autonomous Modes */
 autonomous::Basic *basic;
-autonomous::OneNote *onenote;
 autonomous::MultiNote *multinote;
 
 const int DRIVE_L1_ID = 3;

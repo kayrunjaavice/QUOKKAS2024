@@ -6,6 +6,8 @@
 
 #include <fmt/core.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
 
 double currentTimeStamp = 0, lastTimestamp = 0, dt = 0;
 double matchTime = 0;
@@ -13,7 +15,9 @@ double matchTime = 0;
 std::string m_autoSelected;
 
 
-void Robot::RobotInit() {
+void Robot::RobotInit() {  
+  this->curr_arm_target = manip->getInstance().kARM_START_POS;
+  
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption("Basic", "Basic");  
   m_chooser.AddOption("One Note", "OneNote");
@@ -86,7 +90,8 @@ void Robot::TeleopPeriodic() {
   /* Intake */
   if (xbox->GetRightBumper() && manip->getInstance().get_note_sensor()) {
     // If pressing intake button, and the NOTE is not in the intake
-    manip->getInstance().intake(0.5);
+    manip->getInstance().intake(0.75);
+    this->curr_arm_target = manip->getInstance().kARM_FLOOR_POS;
   } else if (xbox->GetLeftBumper()) {
     // Outtake
     manip->getInstance().intake(-1.0);
@@ -97,9 +102,32 @@ void Robot::TeleopPeriodic() {
     manip->getInstance().shoot(0.0);
   }
 
+  if (xbox->GetRightBumperReleased()) {
+    // No longer intaking; raise intake to avoid damage
+    this->curr_arm_target = manip->getInstance().kARM_FENDER_POS;
+  }
+
   /* Shooter */
+  if (xbox->GetRightTriggerAxis() > 0.1) {
+    // Camera style half-press for aiming
+    this->curr_arm_target = manip->getInstance().kARM_FENDER_POS;
+
+    // vision aiming
+    std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+    float tx = table->GetNumber("tx", 0.0);
+    double Kp = 0.005;
+    drive->getInstance().move(power, Kp * tx);
+  }
+
   if (xbox->GetRightTriggerAxis() > 0.5) {
-    manip->getInstance().shoot(xbox->GetRightTriggerAxis());
+    if (manip->getInstance().get_arm_enc() < manip->getInstance().kARM_START_POS) {
+      // If arm turned back farther than starting config.
+      manip->getInstance().shoot(0.25);
+    } else {
+      // High goal shooting
+      // Adjustable by driver. 50% press => 0% power, 100% press => 100% power
+      manip->getInstance().shoot((xbox->GetRightTriggerAxis() - 0.5) * 2);
+    }
 
     if (xbox->GetRightBumper()) {
       // Run intake despite NOTE being in intake
@@ -111,14 +139,21 @@ void Robot::TeleopPeriodic() {
     manip->getInstance().shoot(0.0);
   }
 
-  /* Arm */
-  // Avoid going past 25% power. ABSOLUTE MAXIMUM 50%.
+  /* Arm manual control */
+  if (xbox->GetYButtonPressed()) {
+    // Amp scoring config
+    this->curr_arm_target = this->manip->getInstance().kARM_AMP_POS;
+  }
+
   if (xbox->GetPOV(0) == 0) {
-    manip->getInstance().arm(0.25);  // Up
+    manip->getInstance().move_arm(0.5);  // Up
+    this->curr_arm_target = this->manip->getInstance().get_arm_enc();
   } else if (xbox->GetPOV(0) == 180) {
-    manip->getInstance().arm(-0.25);  // Down
+    manip->getInstance().move_arm(-0.5);  // Down
+    this->curr_arm_target = this->manip->getInstance().get_arm_enc();
   } else {
-    manip->getInstance().arm(0.0);
+    // Move arm to preset target, or current position if last command was manual control.
+    manip->getInstance().arm_to_pos(curr_arm_target);
   }
 
   frc::SmartDashboard::PutNumber("Arm", manip->getInstance().get_arm_enc());

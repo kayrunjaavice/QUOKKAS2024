@@ -10,7 +10,7 @@ namespace subsystems
 {
     class Manipulator
     {
-    private:        
+    private:    
         frc::DutyCycleEncoder arm_enc{9};
     
         ctre::phoenix::motorcontrol::can::WPI_VictorSPX arm_l{5};
@@ -27,11 +27,12 @@ namespace subsystems
         Manipulator(Manipulator const&);
         void operator=(Manipulator const&);
     public:
-        double kARM_FLOOR_POS = 0.584;
-        double kARM_START_POS = 0.376;
-        double kARM_AMP_POS   = 0.325;
+        double kARM_FLOOR_POS = 0.584;  // intaking
+        double kARM_START_POS = 0.376;  // start config
+        double kARM_FENDER_POS = 0.55;  // close shot
+        double kARM_AMP_POS   = 0.325;  // amp scoring
         
-        void arm(double power);
+        void move_arm(double power);
         void arm_to_pos(double pos);
         void intake(double power);
         void shoot(double power);

@@ -10,7 +10,7 @@ namespace subsystems
     }
     
     Manipulator::Manipulator()
-    {
+    {        
         this->intake_motor.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
         this->arm_l.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
         this->arm_r.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
@@ -24,15 +24,15 @@ namespace subsystems
     /* See Manipulator::kARM_FLOOR_POS etc. */
     void Manipulator::arm_to_pos(double pos)
     {
-        double Kp = 0.0;
+        double Kp = -5.0;
         double error = pos - this->arm_enc.GetAbsolutePosition();
         double power = Kp * error;
-        this->arm(power);
+        this->move_arm(power);
     }
 
-    void Manipulator::arm(double power)
+    void Manipulator::move_arm(double power)
     {
-        const double max_power = 0.25;
+        const double max_power = 0.5;
 
         // Stop from making too much torque
         if (power > max_power) {

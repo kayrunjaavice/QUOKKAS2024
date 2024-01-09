@@ -48,6 +48,8 @@ frc::Timer autoTimer;
 subsystems::Drive *drive;
 subsystems::Manipulator *manip;
 
+double curr_arm_target;
+
 /* Autonomous Modes */
 autonomous::Basic *basic;
 autonomous::OneNote *onenote;

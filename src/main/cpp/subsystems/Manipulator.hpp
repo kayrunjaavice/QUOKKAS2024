@@ -28,8 +28,8 @@ namespace subsystems
         void operator=(Manipulator const&);
     public:
         double kARM_FLOOR_POS = 0.584;  // intaking
+        double kARM_FENDER_POS = 0.53;  // close shot
         double kARM_START_POS = 0.376;  // start config
-        double kARM_FENDER_POS = 0.55;  // close shot
         double kARM_AMP_POS   = 0.325;  // amp scoring
         
         void move_arm(double power);

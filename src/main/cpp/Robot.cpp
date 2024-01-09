@@ -102,6 +102,13 @@ void Robot::TeleopPeriodic() {
     manip->getInstance().shoot(0.0);
   }
 
+  if (xbox->GetRightBumper() && !manip->getInstance().get_note_sensor()) {
+    // If pressing intake and NOTE is in the intake
+    xbox->SetRumble(frc::GenericHID::kBothRumble, 1.0);
+  } else {
+    xbox->SetRumble(frc::GenericHID::kBothRumble, 0.0);
+  }
+
   if (xbox->GetRightBumperReleased()) {
     // No longer intaking; raise intake to avoid damage
     this->curr_arm_target = manip->getInstance().kARM_FENDER_POS;
@@ -109,20 +116,28 @@ void Robot::TeleopPeriodic() {
 
   /* Shooter */
   if (xbox->GetRightTriggerAxis() > 0.1) {
-    // Camera style half-press for aiming
-    this->curr_arm_target = manip->getInstance().kARM_FENDER_POS;
+    if (manip->getInstance().get_arm_enc() < manip->getInstance().kARM_START_POS) {
+      // If arm turned back farther than starting config
+      manip->getInstance().shoot(0.25);
+    } else {
+      // High goal shooting
+      // Set shot angle
+      this->curr_arm_target = manip->getInstance().kARM_FENDER_POS;  // TODO: vision ranging LUT
+    }
 
     // vision aiming
     std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-    float tx = table->GetNumber("tx", 0.0);
-    double Kp = 0.005;
+    double tx = table->GetNumber("tx", 0.0);
+    double Kp = 0.05;
     drive->getInstance().move(power, Kp * tx);
+    frc::SmartDashboard::PutNumber("tx", tx);
   }
 
   if (xbox->GetRightTriggerAxis() > 0.5) {
     if (manip->getInstance().get_arm_enc() < manip->getInstance().kARM_START_POS) {
-      // If arm turned back farther than starting config.
-      manip->getInstance().shoot(0.25);
+      // If arm turned back farther than starting config, score AMP
+      manip->getInstance().intake(1.0);
+      manip->getInstance().shoot(0.5);
     } else {
       // High goal shooting
       // Adjustable by driver. 50% press => 0% power, 100% press => 100% power

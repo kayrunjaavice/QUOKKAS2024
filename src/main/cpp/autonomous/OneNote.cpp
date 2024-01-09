@@ -6,7 +6,7 @@ namespace autonomous
     }
     
     void OneNote::run() {        
-        subsystems::Drive::getInstance().gyro_drive(0.25, 0.0);
+        // subsystems::Drive::getInstance().gyro_drive(0.25, 0.0);
     }
     
 } // namespace autonomous

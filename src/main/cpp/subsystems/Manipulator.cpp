@@ -13,7 +13,9 @@ namespace subsystems
     {        
         this->intake_motor.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
         this->arm_l.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
+        this->arm_l.ConfigOpenloopRamp(0.25);
         this->arm_r.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
+        this->arm_r.ConfigOpenloopRamp(0.25);
     }
 
     double Manipulator::get_arm_enc()
@@ -24,7 +26,7 @@ namespace subsystems
     /* See Manipulator::kARM_FLOOR_POS etc. */
     void Manipulator::arm_to_pos(double pos)
     {
-        double Kp = -5.0;
+        double Kp = -10.0;
         double error = pos - this->arm_enc.GetAbsolutePosition();
         double power = Kp * error;
         this->move_arm(power);

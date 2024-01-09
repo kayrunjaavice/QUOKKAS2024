@@ -18,7 +18,7 @@ namespace autonomous
         if (util::wait(st, 2)) {
             // Lower arm
             Manipulator::getInstance().shoot(0.5);
-            Manipulator::getInstance().arm_to_pos(Manipulator::getInstance().kARM_FENDER_POS);
+            Manipulator::getInstance().arm_to_pos(0.545);
         } else if (util::wait(st, 4)) {
             // Shoot
             Manipulator::getInstance().intake(1.0);

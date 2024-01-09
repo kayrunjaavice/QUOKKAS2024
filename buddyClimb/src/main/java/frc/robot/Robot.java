@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_Drive.tankDrive(-driverController.getLeftY(), driverController.getRightY());
+    m_Drive.arcadeDrive(driverController.getLeftX(), driverController.getLeftY());
 
     // // BUTTON A: BUDDY GRABBER
     // if (driverController.getAButtonPressed()) { 
@@ -135,10 +135,6 @@ public class Robot extends TimedRobot {
 
     m_buddyMasterMotor.set(driverController.getRightTriggerAxis());
 
-    if (driverController.getLeftBumperReleased()){
-      m_liftMasterMotor.set(driverController.getLeftTriggerAxis());
-    } else {
-      m_liftMasterMotor.set(-driverController.getLeftTriggerAxis());
-    }
+    m_liftMasterMotor.set(driverController.getRightY());
   }
 }

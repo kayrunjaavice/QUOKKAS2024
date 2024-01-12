@@ -53,6 +53,7 @@ double curr_arm_target;
 /* Autonomous Modes */
 autonomous::Basic *basic;
 autonomous::MultiNote *multinote;
+autonomous::SendIt *sendit;
 
 const int DRIVE_L1_ID = 3;
 const int DRIVE_L2_ID = 4;

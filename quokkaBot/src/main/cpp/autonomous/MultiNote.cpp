@@ -3,9 +3,7 @@
 #include "../util/util.hpp"
 
 namespace autonomous
-{
-    double st;  // start time
-    
+{    
     MultiNote::MultiNote() {
         st = frc::GetTime().value();
         frc::SmartDashboard::PutNumber("start time", st);

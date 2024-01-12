@@ -21,6 +21,7 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption("Basic", "Basic");  
   m_chooser.AddOption("Multi Note", "MultiNote");
+  m_chooser.AddOption("Send It", "SendIt");
   
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
@@ -53,6 +54,7 @@ void Robot::AutonomousInit() {
 
   this->basic = new autonomous::Basic();
   this->multinote = new autonomous::MultiNote();
+  this->sendit = new autonomous::SendIt();
 }
 
 void Robot::AutonomousPeriodic() {
@@ -65,18 +67,18 @@ void Robot::AutonomousPeriodic() {
     this->basic->run();
   } else if (m_autoSelected == "MultiNote") {
     this->multinote->run();
-  } else {
+  } else if (m_autoSelected == "SendIt") {
+    this->sendit->run();
+  }
+  
+  else {
     this->basic->run();
   }
 }
 
 void Robot::TeleopInit() {}
 
-void Robot::TeleopPeriodic() {
-  /* Test */
-  std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-  double tx = table->GetNumber("ty", 0.0);
-  
+void Robot::TeleopPeriodic() {  
   /* Drive */
   double power = -xbox->GetRawAxis(1);     // 1 -- Left Y Axis
   double steering = xbox->GetRawAxis(4);  // 4 -- Rght X Axis
@@ -86,7 +88,7 @@ void Robot::TeleopPeriodic() {
   /* Intake */
   if (xbox->GetRightBumper() && manip->getInstance().get_note_sensor()) {
     // If pressing intake button, and the NOTE is not in the intake
-    manip->getInstance().intake(0.75);
+    manip->getInstance().intake(0.375);
     if (xbox->GetRightTriggerAxis() < 0.5) {
       this->curr_arm_target = manip->getInstance().kARM_FLOOR_POS;
     }
@@ -120,7 +122,10 @@ void Robot::TeleopPeriodic() {
     } else {
       // High goal shooting
       // Set shot angle
-      // this->curr_arm_target = manip->getInstance().kARM_FENDER_POS;  // TODO: vision ranging LUT
+      // std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+      // double ty = table->GetNumber("ty", 0.0);
+      // double shot_angle = -0.00008 * pow(ty,2) + .00252*ty + .4992;
+      // this->curr_arm_target = shot_angle;
     }
 
     // vision aiming

@@ -4,12 +4,12 @@
 
 namespace autonomous
 {
-    class MultiNote
+    class SendIt
     {
     private:
         double st;  // start time
     public:
-        MultiNote(/* args */);
+        SendIt(/* args */);
         void run();
     };
 } // namespace autonomous

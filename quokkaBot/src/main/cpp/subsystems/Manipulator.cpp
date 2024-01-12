@@ -26,7 +26,7 @@ namespace subsystems
     /* See Manipulator::kARM_FLOOR_POS etc. */
     void Manipulator::arm_to_pos(double pos)
     {
-        double Kp = -10.0;
+        double Kp = -15.0;
         double error = pos - this->arm_enc.GetAbsolutePosition();
         double power = Kp * error;
         this->move_arm(power);
